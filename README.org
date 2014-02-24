@@ -1,0 +1,37 @@
+# -*- coding: utf-8; mode: org; -*-
+#+OPTIONS: ^:{}
+
+An easier way to download papers and bibtex information from [[http://dblp.org/][DBLP]].
+
+Example:
+
+#+BEGIN_EXAMPLE
+$ ./paperget.py reingold connectivity log space
+        authors: Omer Reingold
+     bibtex_url: http://www.dblp.org/rec/bibtex/journals/jacm/Reingold08
+            doi: http://doi.acm.org/10.1145/1391289.1391291
+          title: Undirected connectivity in log-space. 
+          venue: J. ACM (JACM) 55(4) (2008)
+      venue_url: http://www.dblp.org/db/journals/jacm/jacm55.html#Reingold08
+           year: 2008
+Is this the paper you are looking for? [Yn]y
+Use the bibtex key 'reingold2008'? [Yn]y
+Following http://doi.acm.org/10.1145/1391289.1391291
+Found acceptable destination: http://dl.acm.org/citation.cfm?doid=1391289.1391291
+Using module ACM to download pdf...
+Successfully downloaded ~/papers/reingold2008.pdf
+No suitable bib module for: http://dl.acm.org/citation.cfm?doid=1391289.1391291
+Falling back to DBLP bibtex information.
+Successfully downloaded ~/papers/reingold2008.bib
+#+END_EXAMPLE
+
+This searches on http://dblp.org/ and automatically fetches the pdf
+and the accompanying bibtex file, renaming the files and updating the
+bibtex information to comply with the bibtex key.
+
+Download of pdf files works for several common journals/archives.  If
+the pdf download fails, it falls back to google.
+
+Currently bibtex files always come from DBLP.
+
+The path ~/papers/ and the bibtex key schema are hardcoded.
