@@ -42,7 +42,9 @@ def make_bibkey(result):
         first_author = result['authors']
     names = first_author.split(' ')
     last_name = names[-1].lower()
-    return "%s%d" % (last_name, result['year'])
+    key = "%s%d" % (last_name, result['year'])
+    key = key.encode('ascii', errors='ignore')
+    return key
 
 def add_bibkey(result):
     result['key'] = make_bibkey(result)
