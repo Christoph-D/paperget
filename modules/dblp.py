@@ -7,10 +7,9 @@ def find(query):
     hits = r['result']['hits']
     if hits['@sent'] == '0':
         return None
-    if hits['@sent'] == '1':
-        result = hits['hit']
-    else:
-        result = hits['hit'][0]
+    result = hits['hit']
+    if isinstance(result, list):
+        result = result[0]
     result = {
         'bibtex_url': result['url'],
         'title': result['info']['title']['text'],
