@@ -1,19 +1,16 @@
-import urllib2, cookielib
+import requests
 from BeautifulSoup import BeautifulSoup
 
-# Sciencedirect requires cookies for pdf downloads.
-cookies = cookielib.CookieJar()
-opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookies))
-opener.addheaders = [('User-agent', 'Mozilla/5.0 (Ubuntu; X11; Linux i686; rv:9.0.1) Gecko/20100101 Firefox/9.0.1')]
-
 def download_pdf(url, filename):
-    html = opener.open(url).read()
-    soup = BeautifulSoup(html)
+    headers = { 'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:34.0) Gecko/20100101 Firefox/34.0' }
+    landingpage = requests.get(url, headers=headers)
+    soup = BeautifulSoup(landingpage.text)
     pdflink = soup.find('a', { 'id' : 'pdfLink' })
     if pdflink is None:
         print 'Could not find PDF link on ScienceDirect page.'
         return False
-    pdf = opener.open(pdflink['href']).read()
+    # Sciencedirect requires cookies for pdf downloads.
+    pdf = requests.get(pdflink['href'], cookies=landingpage.cookies, headers=headers).content
     if pdf[:4] != '%PDF':
         print 'You do not seem to have the permission to view this pdf.'
         return False
