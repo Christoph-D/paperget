@@ -72,9 +72,10 @@ def shrink_pdf(path):
         os.rename(path + '~', path)
 
 def open_pdf(path):
-    '''Opens the given file in evince.'''
+    '''Opens the given file in the default pdf viewer (likely works only
+    on linux).'''
     if os.fork() == 0:
-        # Eat stdout/stderr of evince
+        # Eat stdout/stderr
         os.dup2(os.open('/dev/null', os.O_WRONLY), 1)
         os.dup2(1, 2)
-        os.execvp('evince', ['evince', path])
+        os.execvp('xdg-open', ['xdg-open', path])
