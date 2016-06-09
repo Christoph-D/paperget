@@ -15,8 +15,8 @@ opener.addheaders = [('User-agent', 'Mozilla/5.0 (Ubuntu; X11; Linux i686; rv:9.
 def find_acceptable_url(url):
     '''Follow redirects until some module claims it supports the URL
     or we exhausted the redirects.'''
-    if url == '':
-        return ''
+    if url == '' or url is None:
+        return None
     updated_url = True
     while updated_url:
         updated_url = False
@@ -40,6 +40,8 @@ def register_module(url_regex, module):
     modules.append((re.compile(url_regex), module))
 
 def dispatch_download_pdf(url, filename):
+    if url is None:
+        return False
     for url_regex, module in modules:
         if url_regex.match(url):
             if 'download_pdf' in module:
@@ -49,6 +51,8 @@ def dispatch_download_pdf(url, filename):
     return False
 
 def dispatch_download_bib(url, filename):
+    if url is None:
+        return False
     for url_regex, module in modules:
         if url_regex.match(url):
             if 'download_bib' in module:
