@@ -40,9 +40,16 @@ def download_bib(url, filename):
             ('__EVENTVALIDATION', eventvalidation)])
     return urllib.urlretrieve(url, filename, data=data) is not None
 
+def download_pdf_chapter(url, filename):
+    return urllib.urlretrieve(url.replace('/chapter/', '/content/pdf/', 1) + '.pdf', filename) is not None
+
 import base
 base.register_module('http://www\.springerlink\.com/content/.*',
                      {'name': 'springerlink',
                       'download_pdf': download_pdf,
                       'download_bib': download_bib,
+                      })
+base.register_module('http://link\.springer\.com/chapter/.*',
+                     {'name': 'springerlink_chapter',
+                      'download_pdf': download_pdf_chapter,
                       })
