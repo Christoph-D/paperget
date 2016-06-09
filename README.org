@@ -8,14 +8,12 @@ Example:
 #+BEGIN_EXAMPLE
 $ ./paperget.py reingold connectivity log space
         authors: Omer Reingold
-     bibtex_url: http://www.dblp.org/rec/bibtex/journals/jacm/Reingold08
-            doi: http://doi.acm.org/10.1145/1391289.1391291
-          title: Undirected connectivity in log-space. 
-          venue: J. ACM (JACM) 55(4) (2008)
-      venue_url: http://www.dblp.org/db/journals/jacm/jacm55.html#Reingold08
+             ee: http://doi.acm.org/10.1145/1391289.1391291
+          title: Undirected connectivity in log-space.
+          venue: J. ACM
            year: 2008
-Is this the paper you are looking for? [Yn]y
-Use the bibtex key 'reingold2008'? [Yn]y
+Is this the paper you are looking for? [Yn]
+Use the bibtex key 'reingold2008'? [Yn]
 Following http://doi.acm.org/10.1145/1391289.1391291
 Found acceptable destination: http://dl.acm.org/citation.cfm?doid=1391289.1391291
 Using module ACM to download pdf...
