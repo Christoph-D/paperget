@@ -1,1 +1,1 @@
-__all__ = ['base', 'dblp', 'springerlink', 'sciencedirect', 'acm', 'google']
+__all__ = ['base', 'dblp', 'arxiv', 'springerlink', 'sciencedirect', 'acm', 'google']
