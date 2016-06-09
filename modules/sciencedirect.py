@@ -6,11 +6,17 @@ def download_pdf(url, filename):
     landingpage = requests.get(url, headers=headers)
     soup = BeautifulSoup(landingpage.text)
     pdflink = soup.find('a', { 'id' : 'pdfLink' })
-    if pdflink is None:
-        print 'Could not find PDF link on ScienceDirect page.'
-        return False
+    if pdflink is not None:
+        pdflink = pdflink['href']
+    else:
+        # Try something else.
+        pdflink = soup.find('div', { 'id' : 'article-download' })
+        if pdflink is None:
+            print 'Could not find PDF link on ScienceDirect page.'
+            return False
+        pdflink = 'http:' + pdflink.a['href']
     # Sciencedirect requires cookies for pdf downloads.
-    pdf = requests.get(pdflink['href'], cookies=landingpage.cookies, headers=headers).content
+    pdf = requests.get(pdflink, cookies=landingpage.cookies, headers=headers).content
     if pdf[:4] != '%PDF':
         print 'You do not seem to have the permission to view this pdf.'
         return False
