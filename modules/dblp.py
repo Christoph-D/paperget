@@ -1,7 +1,13 @@
 import urllib, json, re
 
+def find_electronic_edition(bibtex):
+    m = re.search('^ *url += +\\{([^}]*)\\}', bibtex, re.MULTILINE)
+    if m is None:
+        return None
+    return m.group(1)
+
 def find(query):
-    url = "http://www.dblp.org/search/api/?q=%s&h=5&c=4&f=0&format=json" % urllib.quote_plus(query)
+    url = "http://www.dblp.org/search/publ/api/?q=%s&h=5&c=4&f=0&format=json" % urllib.quote_plus(query)
     json_code = urllib.urlopen(url).read()
     r = json.loads(json_code)
     hits = r['result']['hits']
@@ -10,27 +16,19 @@ def find(query):
     result = hits['hit']
     if isinstance(result, list):
         result = result[0]
+    bibtex_url = result['info']['url'].replace('/rec/', '/rec/bib2/', 1) + '.bib'
+    bibtex = urllib.urlopen(bibtex_url).read()
     result = {
-        'bibtex_url': result['url'],
-        'title': result['info']['title']['text'],
+        'bibtex': bibtex,
+        'title': result['info']['title'],
         'authors': result['info']['authors']['author'],
-        'doi': result['info']['title']['@ee'],
+        'ee': find_electronic_edition(bibtex),
         'year': int(result['info']['year']),
-        'venue': result['info']['venue']['text'],
-        'venue_url': 'http://www.dblp.org/' + result['info']['venue']['@url'],
+        'venue': result['info']['venue'],
         }
     return result
 
 def download_bib(result, filename):
-    bib = urllib.urlopen(result['bibtex_url']).read()
-    bib = bib.replace('<pre>', '')
-    bib = bib.replace('</pre>', '')
-    bib = bib.replace('\r', '')
-    result = []
-    for line in bib.split('\n'):
-        if line != '' and line[0] != '<':
-            line = re.sub('<[^>]*>', '', line)
-            result.append(line)
     with open(filename, 'w') as f:
-        f.write('\n'.join(result))
+        f.write(result['bibtex'])
     return True

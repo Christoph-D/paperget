@@ -55,13 +55,15 @@ def add_acceptable_url(result):
     '''Adds the field 'acceptable_url' to the dictionary.  This
     operation is fairly expensive because it needs to resolve multiple
     HTTP redirects, so only call if necessary.'''
-    result['acceptable_url'] = base.find_acceptable_url(result['doi'])
+    result['acceptable_url'] = base.find_acceptable_url(result['ee'])
 
 def find(query):
     r = dblp.find(query)
     if r is None:
         return None
     for key, value in sorted(r.iteritems()):
+        if key == 'bibtex':
+            continue
         if type(value) is list:
             print "%15s: %s" % (key, ', '.join(value))
         else:
