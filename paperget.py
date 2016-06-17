@@ -88,11 +88,15 @@ def fix_bibtex(code, bibtex_key):
         code = code[1:]
     code = code.replace(u'\r\n', u'\n')
     # Add empty line at the end if it is missing.
-    if code != u'' and code[-1] != u'\n':
-        code += u'\n'
+    code = code.strip() + u'\n'
     # Fix bibtex key.
     code = re.sub(u'^(@[^ ]*) *\{.*', u'\\1{%s,' % bibtex_key, code)
-    return code
+    # Remove redundant url fields that point to DOIs.
+    result = []
+    for line in code.split(u'\n'):
+        if not re.match(u'^ *url *=.*doi\.', line):
+            result.append(line)
+    return '\n'.join(result)
 
 def download_bib(result, path, bibtex_key):
     if not base.dispatch_download_bib(result['acceptable_url'], path):
