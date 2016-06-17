@@ -9,7 +9,11 @@ def find_electronic_edition(bibtex):
 def find(query):
     url = "http://www.dblp.org/search/publ/api/?q=%s&h=5&c=4&f=0&format=json" % urllib.quote_plus(query)
     json_code = urllib.urlopen(url).read()
-    r = json.loads(json_code)
+    try:
+        r = json.loads(json_code)
+    except ValueError:
+        print('Received:\n%s\n\nError: Could not decode JSON!' % json_code)
+        return None
     hits = r['result']['hits']
     if hits['@sent'] == '0':
         return None
