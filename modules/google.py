@@ -9,7 +9,7 @@ base_url = 'http://www.google.com/search?q="%s"+filetype:pdf+|+filetype:ps&filte
 
 def find(query):
     '''Returns the URL to a pdf or ps file, if successful.'''
-    url = base_url % urllib.quote_plus(query)
+    url = base_url % urllib.quote_plus(query.encode('utf8'))
     html = urllib.urlopen(url).read()
     soup = BeautifulSoup(html)
     results = []
